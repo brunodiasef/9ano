@@ -203,8 +203,8 @@ body::before{
   overflow:hidden;box-shadow:var(--sombra);display:flex;flex-direction:column}
 .modal-card .arte{background:linear-gradient(150deg,#EFE5D0,#E2D5B9);display:grid;place-items:center;padding:0;
   border-bottom:1px solid var(--linha)}
-.modal-card .arte svg{width:100%;max-width:230px;height:140px}
-.modal-card .arte img{width:100%;height:160px;object-fit:cover;display:block}
+.modal-card .arte svg{width:100%;max-width:250px;height:150px}
+.modal-card .arte img{width:100%;height:180px;object-fit:cover;display:block}
 .modal-card .corpo{padding:18px;display:flex;flex-direction:column;gap:9px;flex:1}
 .modal-card .tag{align-self:flex-start;font-size:.62rem;background:rgba(192,138,46,.16);color:#7A5312;
   padding:5px 11px;border-radius:3px;border:1px solid rgba(192,138,46,.3)}
@@ -405,7 +405,9 @@ body::before{
   #lateral{position:fixed;z-index:50;left:0;top:0;width:274px;transform:translateX(-102%);transition:transform .3s ease;box-shadow:0 0 60px rgba(0,0,0,.5)}
   #lateral.aberto{transform:none}
   #hamburguer{display:block}
-  #fundo-menu{position:fixed;inset:0;background:rgba(36,26,17,.5);z-index:45}
+  #fundo-menu{position:fixed;inset:0;background:rgba(36,26,17,.5);z-index:45;animation:surge .3s ease both}
+  body.menu-aberto{overflow:hidden}
+  @keyframes surge{from{opacity:0}to{opacity:1}}
   .equip-area{grid-template-columns:1fr}
   .tl{grid-template-columns:1fr}
   .tl::before{left:24px;right:auto;top:0;bottom:0;width:2px;height:auto;background:repeating-linear-gradient(180deg,#C6B08A 0 7px,transparent 7px 13px)}
@@ -534,8 +536,29 @@ const CAPA_M2 = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgFBgcG
    Deixe '' para continuar usando a ilustração em SVG.
    ----------------------------------------------------------------- */
 const IMAGENS_MODALIDADES = {
-  /* Módulo 1 */ beisebol:'fotos/beisebol.jpg', softbol:'fotos/softbol.jpg', criquete:'fotos/crikete.jpg', taco:'fotos/taco.jpg',
-  /* Módulo 2 */ trilhas:'fotos/trilhas.jpg', escalada:'fotos/escalada.jpg', rapel:'fotos/rapel.jpg', rafting:'raftin.jpg', arvorismo:'arvorismo.jpg', ciclo:'ciclo.jpg', canoagem:'canoagem.jpg'
+  /* Módulo 1 */
+  beisebol : 'fotos/beisebol.jpg',
+  softbol  : 'fotos/softbol.jpg',
+  criquete : 'fotos/criquete.jpg',
+  taco     : 'fotos/taco.jpg',
+  /* Módulo 2 */
+  trilhas   : 'fotos/trilhas.jpg',
+  escalada  : 'fotos/escalada.jpg',
+  rapel     : 'fotos/rapel.jpg',
+  rafting   : 'fotos/rafting.jpg',
+  arvorismo : 'fotos/arvorismo.jpg',
+  ciclo     : 'fotos/cicloturismo.jpg',
+  canoagem  : 'fotos/canoagem.jpg'
+};
+
+/* Se o arquivo da foto ainda não existir na pasta, o card volta sozinho
+   para a ilustração em SVG — nada de imagem quebrada na tela. */
+window.semFoto = function(img){
+  const art = img.getAttribute('data-art');
+  if(!art || !ART[art]) return;
+  img.outerHTML = img.classList.contains('grande')
+    ? ART[art].replace('<svg ','<svg class="grande" ')
+    : ART[art];
 };
 
 const ICO = {
@@ -832,7 +855,9 @@ function fecharJanela(){
 $('#jFechar').addEventListener('click',fecharJanela);
 $('#veu').addEventListener('click',e=>{ if(e.target.id==='veu') fecharJanela(); });
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape' && !$('#veu').classList.contains('oculto')) fecharJanela();
+  if(e.key!=='Escape') return;
+  if(!$('#veu').classList.contains('oculto')) fecharJanela();
+  else if($('#lateral') && $('#lateral').classList.contains('aberto')) fecharLateral();
 });
 
 /* ---------- MENU ---------- */
@@ -856,15 +881,22 @@ function marcarMenu(v){
 function fecharLateral(){
   $('#lateral').classList.remove('aberto');
   $('#hamburguer').setAttribute('aria-expanded','false');
+  document.body.classList.remove('menu-aberto');
   const f=$('#fundo-menu'); if(f) f.remove();
 }
-$('#hamburguer').addEventListener('click',()=>{
-  const l=$('#lateral'), aberto=l.classList.toggle('aberto');
-  $('#hamburguer').setAttribute('aria-expanded',String(aberto));
-  if(aberto){
+function abrirLateral(){
+  $('#lateral').classList.add('aberto');
+  $('#hamburguer').setAttribute('aria-expanded','true');
+  document.body.classList.add('menu-aberto');
+  if(!$('#fundo-menu')){
     const f=document.createElement('div'); f.id='fundo-menu';
-    f.addEventListener('click',fecharLateral); document.body.appendChild(f);
-  } else fecharLateral();
+    f.addEventListener('click',fecharLateral);
+    // dentro de #app: fica atrás da barra lateral e não bloqueia os botões do menu
+    $('#app').appendChild(f);
+  }
+}
+$('#hamburguer').addEventListener('click',()=>{
+  if($('#lateral').classList.contains('aberto')) fecharLateral(); else abrirLateral();
 });
 
 /* ---------- SCROLL REVEAL ---------- */
@@ -886,15 +918,16 @@ function cardModalidade(m,tipo){
     ? `<p style="font-size:.84rem"><b>Equipamento principal:</b> ${esc(m.equip)}</p><span class="tag">${esc(m.aten)}</span>`
     : `<span class="tag">${esc(m.tag)}</span>`;
   const foto = IMAGENS_MODALIDADES[m.id];
-  const visual = foto ? `<img src="${foto}" alt="Imagem da modalidade ${esc(m.nome)}">` : ART[m.art];
+  const visual = foto
+    ? `<img src="${foto}" alt="Imagem da modalidade ${esc(m.nome)}" data-art="${m.art}" onerror="semFoto(this)">`
+    : ART[m.art];
   return `<article class="modal-card revelar">
-    <div class="arte oculto" data-arte="${m.id}">${visual}</div>
+    <div class="arte">${visual}</div>
     <div class="corpo">
       <h4>${esc(m.nome)}</h4>
       ${rodape}
       <p>${esc(m.desc)}</p>
       <div class="acoes">
-        <button class="btn fantasma" data-verimg="${m.id}">Ver imagem</button>
         <button class="btn ${tipo==='aventura'?'':'laranja'}" data-detalhe="${m.id}" data-tipo="${tipo}">${tipo==='aventura'?'Explorar':'Saiba mais'}</button>
       </div>
     </div>
@@ -1034,7 +1067,7 @@ function jogoFuncaoHTML(){
     <div class="cenario" id="cenFuncao" role="status"></div>
     <div class="opcoes">
       <button class="btn laranja" data-f="ataque">Ataque</button>
-      <button class="btn" data-f="defesa" style="background:var(--casca)">Defesa</button>
+      <button class="btn laranja" data-f="defesa">Defesa</button>
     </div>
     <div class="aviso" id="avFuncao" role="status"></div>
   </div>`;
@@ -1574,11 +1607,6 @@ function ativar(){
     if(b.dataset.acao==='resetar') b.addEventListener('click',resetarProgresso);
   });
   // cards de modalidade
-  $$('[data-verimg]',conteudo).forEach(b=>b.addEventListener('click',()=>{
-    const arte=$('[data-arte="'+b.dataset.verimg+'"]',conteudo);
-    const aberto=arte.classList.toggle('oculto');
-    b.textContent = aberto ? 'Ver imagem' : 'Ocultar imagem';
-  }));
   $$('[data-detalhe]',conteudo).forEach(b=>b.addEventListener('click',()=>{
     const lista = b.dataset.tipo==='aventura' ? MODALIDADES_AVENTURA : MODALIDADES_TACO;
     const m=lista.find(x=>x.id===b.dataset.detalhe);
@@ -1587,7 +1615,7 @@ function ativar(){
       : `<p><b>${esc(m.tag)}</b></p>`;
     const foto=IMAGENS_MODALIDADES[m.id];
     const visual = foto
-      ? `<img class="grande" src="${foto}" alt="Imagem da modalidade ${esc(m.nome)}">`
+      ? `<img class="grande" src="${foto}" alt="Imagem da modalidade ${esc(m.nome)}" data-art="${m.art}" onerror="semFoto(this)">`
       : `<svg class="grande" viewBox="0 0 200 120" role="img" aria-label="Ilustração de ${esc(m.nome)}">${ART[m.art].replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'')}</svg>`;
     abrirJanela(m.nome, `${visual}
       <p>${esc(m.desc)}</p>${extra}<ul class="lista">${m.det.map(d=>`<li>${esc(d)}</li>`).join('')}</ul>`);
