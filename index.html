@@ -256,7 +256,11 @@ body::before{
 .aviso.nao{display:block;background:#F7E7DE;border:1px solid #D9B49F;color:#7A3418}
 
 /* arrastar */
-.equip-area{display:grid;grid-template-columns:minmax(220px,1fr) 2fr;gap:18px}
+.equip-area{display:grid;grid-template-columns:1fr;gap:22px}
+.rot-area{font-family:var(--rotulo);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--tinta2);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--linha)}
+.zona.completa{border-style:solid;border-color:rgba(72,124,60,.55);background:rgba(116,180,98,.18)}
+.zona h4 small{font-family:var(--rotulo);opacity:.7;letter-spacing:.06em}
 .pecas{display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
 .peca{display:flex;align-items:center;gap:8px;background:var(--papel);border:1px solid var(--linha);
   border-radius:8px;padding:9px 13px;font-size:.86rem;box-shadow:0 1px 2px rgba(42,30,20,.08)}
@@ -409,7 +413,6 @@ body::before{
   #fundo-menu{position:fixed;inset:0;background:rgba(36,26,17,.5);z-index:45;animation:surge .3s ease both}
   body.menu-aberto{overflow:hidden}
   @keyframes surge{from{opacity:0}to{opacity:1}}
-  .equip-area{grid-template-columns:1fr}
   .tl{grid-template-columns:1fr}
   .tl::before{left:24px;right:auto;top:0;bottom:0;width:2px;height:auto;background:repeating-linear-gradient(180deg,#C6B08A 0 7px,transparent 7px 13px)}
   .tl button{padding-left:54px}
@@ -521,6 +524,7 @@ const ART = {
   kit:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V4h6v3"/><path d="M12 11v5M9.5 13.5h5"/></svg>`,
   colete:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3l4 3 4-3 3 3v15H5V6z"/><path d="M12 6v14"/></svg>`,
   remo:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20L14 10"/><path d="M14 4a4 4 0 0 1 6 6l-3 3-6-6z"/></svg>`,
+  roupa:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 3l3 2 3-2 5 3-2 4h-2v11H8V10H6L4 6z"/></svg>`,
   cinto:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 10h20v5H2z"/><rect x="9" y="8" width="6" height="9" rx="1"/></svg>`,
   medalha:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="15" r="6"/><path d="M8 3l3 6M16 3l-3 6"/></svg>`
 };
@@ -608,7 +612,7 @@ const MODALIDADES_TACO = [
    det:['É jogado em espaços abertos, ruas, quadras e pátios, com material simples.','Preserva os elementos de lançar, receber, rebater e correr.','Valoriza o lazer, a socialização e a cultura popular.']}
 ];
 const MODALIDADES_AVENTURA = [
-  {id:'trilhas',nome:'Trilhas e caminhadas ecológicas',art:'trilha',equip:'Tênis ou botas, mochila, água e kit de primeiros socorros',aten:'Atenção média',
+  {id:'trilhas',nome:'Trilhas e caminhadas ecológicas',art:'trilha',equip:'Tênis ou botas, roupas leves, mochila, água e kit de primeiros socorros',aten:'Atenção média',
    desc:'Percursos a pé em áreas naturais, com contato direto com a paisagem e a vegetação.',
    det:['Prefira trilhas sinalizadas e conhecidas.','Leve água e alimentos leves em percursos longos.','Respeite os limites do corpo e o ritmo do grupo.']},
   {id:'escalada',nome:'Escalada em rocha',art:'escalada',equip:'Cordas, mosquetões, capacete e cadeirinha',aten:'Atenção alta',
@@ -647,25 +651,33 @@ const CUIDADOS = [
   {n:'Condições climáticas',t:'Chuva, vento e calor extremo mudam o nível de risco.'},
   {n:'Limites do corpo',t:'Respeite o cansaço, a hidratação e o ritmo pessoal.'}
 ];
-const EQUIPAMENTOS = [
-  {id:'corda',nome:'Cordas',ic:'corda',aceita:['escalada']},
-  {id:'mosq',nome:'Mosquetões',ic:'mosquetao',aceita:['escalada']},
-  {id:'cadeirinha',nome:'Cadeirinha',ic:'cadeirinha',aceita:['escalada']},
-  {id:'cordarapel',nome:'Corda específica de rapel',ic:'corda',aceita:['rapel']},
-  {id:'luvas',nome:'Luvas',ic:'luvas',aceita:['rapel']},
-  {id:'bota',nome:'Tênis ou botas',ic:'bota',aceita:['trilhas']},
-  {id:'mochila',nome:'Mochila',ic:'mochila',aceita:['trilhas']},
-  {id:'agua',nome:'Água',ic:'agua',aceita:['trilhas']},
-  {id:'kit',nome:'Kit de primeiros socorros',ic:'kit',aceita:['trilhas']},
-  {id:'colete',nome:'Colete salva-vidas',ic:'colete',aceita:['rafting']},
-  {id:'remo',nome:'Remo',ic:'remo',aceita:['rafting']},
-  {id:'cinto',nome:'Cintos de segurança',ic:'cinto',aceita:['arvorismo']},
-  {id:'capacete',nome:'Capacete',ic:'capacete',aceita:['escalada','rapel','rafting','arvorismo']}
+/* Cada equipamento traz as modalidades em que é utilizado.
+   A atividade gera uma peça para cada uso: o capacete, por aparecer em
+   quatro modalidades, vira quatro peças; as cordas viram duas. */
+const EQUIPAMENTOS_BASE = [
+  {nome:'Cordas',ic:'corda',mods:['escalada','arvorismo']},
+  {nome:'Mosquetões',ic:'mosquetao',mods:['escalada']},
+  {nome:'Cadeirinha',ic:'cadeirinha',mods:['escalada']},
+  {nome:'Cordas específicas de rapel',ic:'corda',mods:['rapel']},
+  {nome:'Luvas',ic:'luvas',mods:['rapel']},
+  {nome:'Capacete',ic:'capacete',mods:['escalada','rapel','rafting','arvorismo']},
+  {nome:'Tênis ou botas',ic:'bota',mods:['trilhas']},
+  {nome:'Roupas leves',ic:'roupa',mods:['trilhas']},
+  {nome:'Mochila',ic:'mochila',mods:['trilhas']},
+  {nome:'Água',ic:'agua',mods:['trilhas']},
+  {nome:'Kit de primeiros socorros',ic:'kit',mods:['trilhas']},
+  {nome:'Colete salva-vidas',ic:'colete',mods:['rafting']},
+  {nome:'Remo',ic:'remo',mods:['rafting']},
+  {nome:'Cintos de segurança',ic:'cinto',mods:['arvorismo']}
 ];
+const EQUIPAMENTOS = [];
+EQUIPAMENTOS_BASE.forEach((e,i)=>e.mods.forEach((m,k)=>EQUIPAMENTOS.push(
+  {id:'eq'+i+'_'+k, nome:e.nome, ic:e.ic, aceita:e.mods.slice()}
+)));
 const ZONAS_EQUIP = [
   {id:'escalada',nome:'Escalada'},{id:'rapel',nome:'Rapel'},{id:'trilhas',nome:'Trilhas'},
   {id:'rafting',nome:'Rafting'},{id:'arvorismo',nome:'Arvorismo'}
-];
+].map(z=>({...z, esperado:EQUIPAMENTOS_BASE.filter(e=>e.mods.includes(z.id)).length}));
 const SITUACOES_FUNCAO = [
   {t:'Uma equipe está tentando marcar pontos.',r:'ataque'},
   {t:'A equipe recupera a bola rebatida e tenta eliminar o corredor.',r:'defesa'},
@@ -1159,11 +1171,12 @@ const jogoEquip={colocados:{},sel:null};
 function jogoEquipHTML(){
   return `<div class="jogo" data-jogo="equip">
     <h3>Atividade: qual equipamento é usado?</h3>
-    <p style="color:var(--tinta2)">Arraste o equipamento até a modalidade correta. No celular, toque no equipamento e depois na modalidade.</p>
+    <p style="color:var(--tinta2)">Arraste o equipamento até a modalidade correta. No celular, toque no equipamento e depois na modalidade.
+      Alguns itens aparecem mais de uma vez porque são usados em mais de uma modalidade — cada modalidade recebe um deles.</p>
     <p class="placar" id="placarEquip"></p>
-    <div class="equip-area" style="margin-top:12px">
-      <div class="pecas" id="pecas"></div>
-      <div class="zonas" id="zonas"></div>
+    <div class="equip-area" style="margin-top:14px">
+      <div><h4 class="rot-area">Equipamentos</h4><div class="pecas" id="pecas"></div></div>
+      <div><h4 class="rot-area">Modalidades</h4><div class="zonas" id="zonas"></div></div>
     </div>
     <div class="aviso" id="avEquip" role="status"></div>
     <div style="margin-top:14px"><button class="btn fantasma" id="btnResetEquip">Recomeçar atividade</button></div>
@@ -1177,9 +1190,12 @@ function montarJogoEquip(raiz){
       return `<button class="peca ${usada?'usada':''}" data-eq="${e.id}" draggable="${!usada}" ${usada?'disabled':''} aria-pressed="false">${ART[e.ic]}<span>${esc(e.nome)}</span></button>`;
     }).join('');
     zonas.innerHTML=ZONAS_EQUIP.map(z=>{
-      const dentro=Object.keys(jogoEquip.colocados).filter(k=>jogoEquip.colocados[k]===z.id)
-        .map(k=>`<span>✓ ${esc(EQUIPAMENTOS.find(e=>e.id===k).nome)}</span>`).join('');
-      return `<div class="zona" data-zona="${z.id}" role="button" tabindex="0" aria-label="Soltar equipamento em ${z.nome}"><h4>${z.nome}</h4><div class="dentro">${dentro}</div></div>`;
+      const postos=Object.keys(jogoEquip.colocados).filter(k=>jogoEquip.colocados[k]===z.id);
+      const dentro=postos.map(k=>`<span>✓ ${esc(EQUIPAMENTOS.find(e=>e.id===k).nome)}</span>`).join('');
+      const completa=postos.length===z.esperado;
+      return `<div class="zona ${completa?'completa':''}" data-zona="${z.id}" role="button" tabindex="0"
+        aria-label="Soltar equipamento em ${z.nome}. ${postos.length} de ${z.esperado} itens">
+        <h4>${z.nome} <small>${postos.length}/${z.esperado}</small></h4><div class="dentro">${dentro}</div></div>`;
     }).join('');
     const total=Object.keys(jogoEquip.colocados).length;
     pl.textContent=total+' de '+EQUIPAMENTOS.length+' equipamentos associados';
@@ -1192,6 +1208,15 @@ function montarJogoEquip(raiz){
   function tentar(eqId,zonaId){
     const eq=EQUIPAMENTOS.find(e=>e.id===eqId);
     if(!eq||jogoEquip.colocados[eqId]) return;
+    const jaTem=Object.keys(jogoEquip.colocados).some(k=>jogoEquip.colocados[k]===zonaId
+      && EQUIPAMENTOS.find(e=>e.id===k).nome===eq.nome);
+    if(jaTem){
+      av.className='aviso nao';
+      av.textContent='Essa modalidade já recebeu o item “'+eq.nome+'”. Leve este para outra modalidade que também o utiliza.';
+      const z=$('[data-zona="'+zonaId+'"]',zonas);
+      if(z){ z.classList.add('tremer'); setTimeout(()=>z.classList.remove('tremer'),400); }
+      return;
+    }
     if(eq.aceita.includes(zonaId)){
       jogoEquip.colocados[eqId]=zonaId;
       av.className='aviso ok';
