@@ -368,6 +368,7 @@ body::before{
 .alt-img{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px}
 .alt-img button{background:var(--papel);border:1px solid var(--linha);border-radius:10px;padding:13px;text-align:center;box-shadow:0 1px 2px rgba(42,30,20,.06)}
 .alt-img button svg{width:100%;height:82px;color:var(--casca)}
+.alt-img button img{width:100%;height:110px;object-fit:cover;border-radius:6px;display:block;border:1px solid var(--linha)}
 .alt-img button.certa{border-color:#8FA97F;background:#EFF4EA}
 .alt-img button.errada{border-color:#C99A81;background:#F9EDE6}
 .assoc{display:grid;gap:10px}
@@ -438,7 +439,7 @@ body::before{
 <!-- TELA INICIAL -->
 <div id="capa">
   <div class="capa-in">
-    <span class="etiqueta">E.E.E.F.M. ILDA FERREIRA DA FONSECA MARTINS</span>
+    <span class="etiqueta">Escola · Aula digital</span>
     <h1>Educação Física – 9º ano</h1>
     <div class="sub">3º trimestre</div>
     <p class="frase">Esportes de campo e taco + Práticas corporais de aventura na natureza. Doze aulas, atividades interativas e um quiz final para fechar o trimestre.</p>
@@ -453,7 +454,7 @@ body::before{
   <aside id="lateral">
     <div class="marca">
       <span class="selo" aria-hidden="true"></span>
-      <span><b>Ed. Física 9º ANO</b><span>3º trimestre</span></span>
+      <span><b>Ed. Física 9º</b><span>3º trimestre</span></span>
     </div>
     <nav id="menu" aria-label="Menu principal"></nav>
     <div class="lateral-box">
@@ -551,8 +552,25 @@ const IMAGENS_MODALIDADES = {
   canoagem  : 'fotos/canoagem.jpg'
 };
 
-/* Se o arquivo da foto ainda não existir na pasta, o card volta sozinho
-   para a ilustração em SVG — nada de imagem quebrada na tela. */
+/* -----------------------------------------------------------------
+   FOTOS DAS QUESTÕES COM IMAGEM DO QUIZ
+   Questão 7 (módulo 1): "Qual imagem representa o críquete?"
+   Questão 14 (módulo 2): "Qual equipamento é característico da escalada?"
+   As três primeiras reaproveitam as mesmas fotos das modalidades.
+   ----------------------------------------------------------------- */
+const IMAGENS_QUIZ = {
+  /* Questão 7 */
+  beisebol : 'fotos/beisebol.jpg',
+  criquete : 'fotos/criquete.jpg',
+  canoagem : 'fotos/canoagem.jpg',
+  /* Questão 14 */
+  remo      : 'fotos/remo.jpg',
+  mosquetao : 'fotos/mosquetao.jpg',
+  colete    : 'fotos/colete.jpg'
+};
+
+/* Se o arquivo da foto ainda não existir na pasta, o card ou a alternativa
+   voltam sozinhos para a ilustração em SVG — nada de imagem quebrada na tela. */
 window.semFoto = function(img){
   const art = img.getAttribute('data-art');
   if(!art || !ART[art]) return;
@@ -745,7 +763,7 @@ const AULAS = [
   {n:1,mod:1,t:'Introdução e conceito',obj:'Compreender o que são os esportes de campo e taco.',ativ:'Leitura visual do conceito e das características',blocos:['conceito_taco']},
   {n:2,mod:1,t:'Modalidades e exemplos',obj:'Reconhecer beisebol, softbol, críquete e taco.',ativ:'Explorar os cards das modalidades',blocos:['modalidades_taco']},
   {n:3,mod:1,t:'Funcionamento, ataque, defesa e regras',obj:'Entender a dinâmica de ataque e defesa e a alternância de funções.',ativ:'Animação “Ver como funciona”',blocos:['jogada']},
-  {n:4,mod:1,t:'Benefícios da prática dos Esportes de Campo e Taco',obj:'Identificar os benefícios e aplicá-los em situações de jogo.',ativ:'Atividade “Qual é a função?”',blocos:['beneficios','jogo_funcao']},
+  {n:4,mod:1,t:'Benefícios e aplicação prática',obj:'Identificar os benefícios e aplicá-los em situações de jogo.',ativ:'Atividade “Qual é a função?”',blocos:['beneficios','jogo_funcao']},
   {n:5,mod:1,t:'Revisão e quiz do módulo 1',obj:'Revisar e verificar a aprendizagem do módulo de campo e taco.',ativ:'Quiz do módulo 1',blocos:['revisao_taco','quiz_mod1']},
   {n:6,mod:2,t:'Introdução às práticas de aventura',obj:'Compreender o que são práticas corporais de aventura na natureza.',ativ:'Leitura dos quatro pilares',blocos:['conceito_aventura']},
   {n:7,mod:2,t:'Principais modalidades',obj:'Conhecer as modalidades de aventura e seus equipamentos principais.',ativ:'Explorar os cards das modalidades',blocos:['modalidades_aventura']},
@@ -959,7 +977,7 @@ const BLOCOS = {
   },
   jogada(){
     return `<div class="cartao destaque" data-jogo="jogada">
-      <h3>Regras básicas comuns</h3>
+      <h3>Regras básicas em movimento</h3>
       <p style="color:var(--tinta2)">Acompanhe uma jogada completa, do ataque até a troca de funções.</p>
       <div class="grade g2" style="margin:14px 0">
         <div class="mini" style="border-color:var(--tabaco)"><h4 style="color:var(--tabaco)">Equipe A — ataque</h4><p>Rebate a bola e corre para pontuar.</p></div>
@@ -1352,7 +1370,13 @@ function montarQuiz(raiz){
     }else if(questao.tipo==='vf'){
       corpo=`<button class="alt" data-k="1"><span class="letra">V</span>Verdadeiro</button><button class="alt" data-k="0"><span class="letra">F</span>Falso</button>`;
     }else if(questao.tipo==='img'){
-      corpo=`<div class="alt-img">${questao.ops.map((o,k)=>`<button data-k="${k}" aria-label="${esc(o.rot)}">${ART[o.art]}<div style="font-size:.84rem;margin-top:6px">${esc(o.rot)}</div></button>`).join('')}</div>`;
+      corpo=`<div class="alt-img">${questao.ops.map((o,k)=>{
+        const foto = o.foto || IMAGENS_QUIZ[o.art];
+        const visual = foto
+          ? `<img src="${foto}" alt="${esc(o.rot)}" data-art="${o.art}" onerror="semFoto(this)">`
+          : ART[o.art];
+        return `<button data-k="${k}" aria-label="${esc(o.rot)}">${visual}<div style="font-size:.84rem;margin-top:6px">${esc(o.rot)}</div></button>`;
+      }).join('')}</div>`;
     }else if(questao.tipo==='assoc'){
       const destinos=questao.pares.map(p=>p.b).slice().sort();
       corpo=`<div class="assoc">${questao.pares.map((p,k)=>`<div class="par"><span>${esc(p.a)}</span>
