@@ -8,6 +8,22 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/playfair-display@5.1.0/600.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/lato@5.1.0/400.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/lato@5.1.0/700.css">
+
+<!-- PRÉ-CARREGAMENTO DE TODAS AS IMAGENS (garante exibição imediata nos modais Explorar/Conhecer) -->
+<link rel="preload" as="image" href="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1fdddd267-2b1c-46b9-8f5c-9ebe7eb50beb.png">
+<link rel="preload" as="image" href="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1e082c1ed-5206-4dcf-aaf3-0e4af22760dd.png">
+<link rel="preload" as="image" href="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/171a1a012-b7fe-4285-b9b6-841f911073e2.png">
+<link rel="preload" as="image" href="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/193cadff9-cb74-4df5-ae3b-494963508eb5.png">
+<link rel="preload" as="image" href="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/10f84207b-8ed6-497d-939b-8b71c0831ddf.png">
+<link rel="preload" as="image" href="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/18bc71b78-f6bc-44e5-9be0-1ecf1edb411a.png">
+<link rel="preload" as="image" href="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1b6e96a08-9fc3-4d3d-a759-38e6a212cb62.png">
+<link rel="preload" as="image" href="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1b8277e66-b358-49ab-bd67-50b345c7d06f.png">
+<link rel="preload" as="image" href="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/10004f405-ca8a-4487-a59d-8892380e75aa.png">
+<link rel="preload" as="image" href="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1fd5d0547-c074-4a89-a88a-97070ec20b75.png">
+<link rel="preload" as="image" href="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/191d44092-4fa6-413d-bd0e-2a761bb80aff.png">
+<link rel="preload" as="image" href="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/19733f339-d861-41c1-a3e2-621af21d8fa7.png">
+<link rel="preload" as="image" href="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/13328b031-ecec-419f-88b0-47c5dc77e09c.png">
+
 <style>
 :root{
   --bg-cream:#FDFBF7;
@@ -216,7 +232,10 @@ textarea:focus{outline:none;border-color:var(--gold)}
 .modal-close:hover{background:var(--gold);color:var(--brown);transform:rotate(90deg)}
 .modal-close .icon{width:18px;height:18px;stroke-width:2.4}
 .modal-body{padding:1.8rem}
-.modal-body img{width:100%;height:230px;object-fit:cover;border-radius:10px;margin-bottom:1.3rem;box-shadow:var(--shadow)}
+/* IMAGEM INTEIRA NO MODAL: altura automática, proporção original preservada (sem corte) */
+.modal-img{width:100%;height:auto;object-fit:contain;border-radius:10px;margin-bottom:1.3rem;box-shadow:var(--shadow);background:#EFE6D2;min-height:160px}
+.modal-img.loaded{background:none;min-height:0}
+.modal-img.failed{color:var(--err)}
 .modal-body p{font-size:.95rem;color:var(--muted);margin-bottom:1rem}
 .equip-title{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:1.2rem 0 .7rem}
 .equip-list{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem}
@@ -446,7 +465,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
             <div class="feature-body"><h3>Beisebol</h3><p>Origem nos Estados Unidos. Rebatidas potentes, corridas entre bases e muita tática.</p><button class="btn btn-outline" onclick="openModal('m-beisebol')">Explorar</button></div>
           </div>
           <div class="feature-card">
-            <div class="feature-img" style="background-image:url('https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/109370a56-5efc-4fcf-8049-6674fa6780ec.png')" role="img" aria-label="Ilustração de jogadora de softbol arremessando"></div>
+            <div class="feature-img" style="background-image:url('https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/171a1a012-b7fe-4285-b9b6-841f911073e2.png')" role="img" aria-label="Ilustração de jogadora de softbol arremessando com bola em tamanho proporcional"></div>
             <div class="feature-body"><h3>Softbol</h3><p>Variação do beisebol, com bola maior e arremesso por baixo. Dinâmico e acessível.</p><button class="btn btn-outline" onclick="openModal('m-softbol')">Explorar</button></div>
           </div>
           <div class="feature-card">
@@ -454,8 +473,8 @@ textarea:focus{outline:none;border-color:var(--gold)}
             <div class="feature-body"><h3>Críquete</h3><p>Muito popular na Inglaterra, Índia e Austrália. Taco achatado e wickets.</p><button class="btn btn-outline" onclick="openModal('m-criquete')">Explorar</button></div>
           </div>
           <div class="feature-card">
-            <div class="feature-img" style="background-image:url('https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/10b721cf8-7fc2-4069-a152-2addaf206010.png')" role="img" aria-label="Ilustração de crianças jogando taco na rua"></div>
-            <div class="feature-body"><h3>Taco</h3><p>Jogo popular brasileiro, de rua. Tacos de madeira, bola pequena e muita diversão.</p><button class="btn btn-outline" onclick="openModal('m-taco')">Explorar</button></div>
+            <div class="feature-img" style="background-image:url('https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/10f84207b-8ed6-497d-939b-8b71c0831ddf.png')" role="img" aria-label="Ilustração de crianças jogando taco na rua com garrafa pet e tacos de madeira"></div>
+            <div class="feature-body"><h3>Taco</h3><p>Jogo popular brasileiro, de rua. Tacos de madeira, garrafa como alvo e muita diversão.</p><button class="btn btn-outline" onclick="openModal('m-taco')">Explorar</button></div>
           </div>
         </div>
 
@@ -467,7 +486,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
               <tr onclick="highlightRow(this)"><td>Beisebol</td><td>Origem nos EUA, taco redondo, bases e forte organização tática.</td></tr>
               <tr onclick="highlightRow(this)"><td>Softbol</td><td>Variação do beisebol, bola maior e arremesso por baixo.</td></tr>
               <tr onclick="highlightRow(this)"><td>Críquete</td><td>Popular na Inglaterra, Índia e Austrália, taco achatado e wickets.</td></tr>
-              <tr onclick="highlightRow(this)"><td>Taco</td><td>Jogo popular brasileiro, praticado em ruas com tacos de madeira.</td></tr>
+              <tr onclick="highlightRow(this)"><td>Taco</td><td>Jogo popular brasileiro, praticado em ruas com tacos de madeira e garrafa como alvo.</td></tr>
             </tbody>
           </table>
         </div>
@@ -478,7 +497,7 @@ textarea:focus{outline:none;border-color:var(--gold)}
             <h3>Taco</h3><div class="origin">Brasil</div>
             <ul>
               <li><svg class="icon"><use href="#i-check"/></svg>Jogo de rua, informal e popular</li>
-              <li><svg class="icon"><use href="#i-check"/></svg>Tacos de madeira artesanais</li>
+              <li><svg class="icon"><use href="#i-check"/></svg>Tacos de madeira e garrafa como alvo</li>
               <li><svg class="icon"><use href="#i-check"/></svg>Regras adaptadas pela comunidade</li>
               <li><svg class="icon"><use href="#i-check"/></svg>Patrimônio da cultura brincante brasileira</li>
             </ul>
@@ -708,57 +727,57 @@ textarea:focus{outline:none;border-color:var(--gold)}
 <!-- ===== MODAIS ===== -->
 <div class="modal" id="m-beisebol" role="dialog" aria-modal="true" aria-label="Beisebol">
   <div class="modal-box"><div class="modal-head"><div><h3>Beisebol</h3><span class="origin">Origem: Estados Unidos</span></div><button class="modal-close" onclick="closeModal('m-beisebol')" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></div>
-  <div class="modal-body"><img src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1e082c1ed-5206-4dcf-aaf3-0e4af22760dd.png" alt="Ilustração em estilo pintura realista de um rebatedor de beisebol"><p>O beisebol é praticado em um campo em formato de diamante. O rebatedor tenta acertar a bola lançada pelo arremessador e correr pelas bases para marcar pontos, enquanto a equipe defensiva busca eliminá-lo com recepções e lançamentos precisos.</p><div class="equip-title">Elementos do jogo</div><ul class="equip-list"><li><svg class="icon"><use href="#i-bat"/></svg>Taco redondo</li><li><svg class="icon"><use href="#i-ball"/></svg>Bola pequena</li><li><svg class="icon"><use href="#i-flag"/></svg>Bases</li><li><svg class="icon"><use href="#i-shield"/></svg>Luvas de defesa</li></ul></div></div>
+  <div class="modal-body"><img class="modal-img" loading="eager" decoding="async" src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1e082c1ed-5206-4dcf-aaf3-0e4af22760dd.png" alt="Ilustração em estilo pintura realista de um rebatedor de beisebol" onload="this.classList.add('loaded')" onerror="modalImgFallback(this)"><p>O beisebol é praticado em um campo em formato de diamante. O rebatedor tenta acertar a bola lançada pelo arremessador e correr pelas bases para marcar pontos, enquanto a equipe defensiva busca eliminá-lo com recepções e lançamentos precisos.</p><div class="equip-title">Elementos do jogo</div><ul class="equip-list"><li><svg class="icon"><use href="#i-bat"/></svg>Taco redondo</li><li><svg class="icon"><use href="#i-ball"/></svg>Bola pequena</li><li><svg class="icon"><use href="#i-flag"/></svg>Bases</li><li><svg class="icon"><use href="#i-shield"/></svg>Luvas de defesa</li></ul></div></div>
 </div>
 
 <div class="modal" id="m-softbol" role="dialog" aria-modal="true" aria-label="Softbol">
   <div class="modal-box"><div class="modal-head"><div><h3>Softbol</h3><span class="origin">Variação do beisebol</span></div><button class="modal-close" onclick="closeModal('m-softbol')" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></div>
-  <div class="modal-body"><img src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/109370a56-5efc-4fcf-8049-6674fa6780ec.png" alt="Ilustração em estilo pintura realista de uma jogadora de softbol"><p>O softbol nasceu como uma variação do beisebol, com bola maior e arremesso realizado por baixo. É um jogo dinâmico, muito praticado em escolas e clubes, mantendo a lógica de rebatida, corrida e eliminação.</p><div class="equip-title">Elementos do jogo</div><ul class="equip-list"><li><svg class="icon"><use href="#i-ball"/></svg>Bola maior</li><li><svg class="icon"><use href="#i-bat"/></svg>Taco</li><li><svg class="icon"><use href="#i-flag"/></svg>Bases</li></ul></div></div>
+  <div class="modal-body"><img class="modal-img" loading="eager" decoding="async" src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/171a1a012-b7fe-4285-b9b6-841f911073e2.png" alt="Ilustração em estilo pintura realista de uma jogadora de softbol com bola em tamanho proporcional" onload="this.classList.add('loaded')" onerror="modalImgFallback(this)"><p>O softbol nasceu como uma variação do beisebol, com bola um pouco maior e arremesso realizado por baixo. É um jogo dinâmico, muito praticado em escolas e clubes, mantendo a lógica de rebatida, corrida e eliminação.</p><div class="equip-title">Elementos do jogo</div><ul class="equip-list"><li><svg class="icon"><use href="#i-ball"/></svg>Bola maior</li><li><svg class="icon"><use href="#i-bat"/></svg>Taco</li><li><svg class="icon"><use href="#i-flag"/></svg>Bases</li></ul></div></div>
 </div>
 
 <div class="modal" id="m-criquete" role="dialog" aria-modal="true" aria-label="Críquete">
   <div class="modal-box"><div class="modal-head"><div><h3>Críquete</h3><span class="origin">Popular na Inglaterra, Índia e Austrália</span></div><button class="modal-close" onclick="closeModal('m-criquete')" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></div>
-  <div class="modal-body"><img src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/193cadff9-cb74-4df5-ae3b-494963508eb5.png" alt="Ilustração em estilo pintura realista de um batedor de críquete"><p>O críquete utiliza um taco achatado e tem como alvo os wickets, pequenas estruturas de madeira atrás do batedor. É um esporte de grande tradição, com partidas longas e regras próprias, muito acompanhado em vários países.</p><div class="equip-title">Elementos do jogo</div><ul class="equip-list"><li><svg class="icon"><use href="#i-bat"/></svg>Taco achatado</li><li><svg class="icon"><use href="#i-flag"/></svg>Wickets</li><li><svg class="icon"><use href="#i-ball"/></svg>Bola</li></ul></div></div>
+  <div class="modal-body"><img class="modal-img" loading="eager" decoding="async" src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/193cadff9-cb74-4df5-ae3b-494963508eb5.png" alt="Ilustração em estilo pintura realista de um batedor de críquete" onload="this.classList.add('loaded')" onerror="modalImgFallback(this)"><p>O críquete utiliza um taco achatado e tem como alvo os wickets, pequenas estruturas de madeira atrás do batedor. É um esporte de grande tradição, com partidas longas e regras próprias, muito acompanhado em vários países.</p><div class="equip-title">Elementos do jogo</div><ul class="equip-list"><li><svg class="icon"><use href="#i-bat"/></svg>Taco achatado</li><li><svg class="icon"><use href="#i-flag"/></svg>Wickets</li><li><svg class="icon"><use href="#i-ball"/></svg>Bola</li></ul></div></div>
 </div>
 
 <div class="modal" id="m-taco" role="dialog" aria-modal="true" aria-label="Taco">
   <div class="modal-box"><div class="modal-head"><div><h3>Taco</h3><span class="origin">Jogo popular brasileiro, de rua</span></div><button class="modal-close" onclick="closeModal('m-taco')" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></div>
-  <div class="modal-body"><img src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/10b721cf8-7fc2-4069-a152-2addaf206010.png" alt="Ilustração em estilo pintura realista de crianças jogando taco na rua"><p>O taco, também conhecido como bets, é um jogo de rua brasileiro com tacos de madeira e bola pequena. As duplas rebatem a bola e correm entre as casas para marcar pontos, enquanto os adversários tentam eliminá-los. Simples, acessível e cheio de memória afetiva.</p><div class="equip-title">Elementos do jogo</div><ul class="equip-list"><li><svg class="icon"><use href="#i-bat"/></svg>Tacos de madeira</li><li><svg class="icon"><use href="#i-ball"/></svg>Bola pequena</li><li><svg class="icon"><use href="#i-flag"/></svg>Casas ou bases</li></ul></div></div>
+  <div class="modal-body"><img class="modal-img" loading="eager" decoding="async" src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/10f84207b-8ed6-497d-939b-8b71c0831ddf.png" alt="Ilustração em estilo pintura realista de crianças jogando taco na rua com garrafa pet dentro do círculo de giz" onload="this.classList.add('loaded')" onerror="modalImgFallback(this)"><p>O taco, também conhecido como bets, é um jogo de rua brasileiro com tacos de madeira e bola pequena. A garrafa (ou casinha) fica em pé como alvo dentro do círculo de giz no asfalto: uma dupla rebate a bola e corre para marcar pontos, enquanto os adversários tentam derrubar o alvo para eliminá-los. Simples, acessível e cheio de memória afetiva.</p><div class="equip-title">Elementos do jogo</div><ul class="equip-list"><li><svg class="icon"><use href="#i-bat"/></svg>Tacos de madeira</li><li><svg class="icon"><use href="#i-ball"/></svg>Bola pequena</li><li><svg class="icon"><use href="#i-flag"/></svg>Garrafa como alvo</li></ul></div></div>
 </div>
 
 <div class="modal" id="m-trilha" role="dialog" aria-modal="true" aria-label="Trilhas e caminhadas">
   <div class="modal-box"><div class="modal-head"><div><h3>Trilhas e Caminhadas Ecológicas</h3><span class="origin">Contato direto com a natureza</span></div><button class="modal-close" onclick="closeModal('m-trilha')" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></div>
-  <div class="modal-body"><img src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1b6e96a08-9fc3-4d3d-a759-38e6a212cb62.png" alt="Ilustração em estilo pintura realista de caminhantes em trilha na floresta"><p>Caminhadas por percursos naturais sinalizados, que unem exercício físico, observação da paisagem e consciência ambiental. Exigem planejamento do percurso e respeito à fauna e à flora.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Tênis ou botas</li><li>Roupas leves</li><li>Mochila com água</li><li>Kit de primeiros socorros</li></ul></div></div>
+  <div class="modal-body"><img class="modal-img" loading="eager" decoding="async" src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1b6e96a08-9fc3-4d3d-a759-38e6a212cb62.png" alt="Ilustração em estilo pintura realista de caminhantes em trilha na floresta" onload="this.classList.add('loaded')" onerror="modalImgFallback(this)"><p>Caminhadas por percursos naturais sinalizados, que unem exercício físico, observação da paisagem e consciência ambiental. Exigem planejamento do percurso e respeito à fauna e à flora.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Tênis ou botas</li><li>Roupas leves</li><li>Mochila com água</li><li>Kit de primeiros socorros</li></ul></div></div>
 </div>
 
 <div class="modal" id="m-escalada" role="dialog" aria-modal="true" aria-label="Escalada em rocha">
   <div class="modal-box"><div class="modal-head"><div><h3>Escalada em Rocha</h3><span class="origin">Força, técnica e superação</span></div><button class="modal-close" onclick="closeModal('m-escalada')" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></div>
-  <div class="modal-body"><img src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1b8277e66-b358-49ab-bd67-50b345c7d06f.png" alt="Ilustração em estilo pintura realista de escaladora em paredão de rocha"><p>Ascensão de paredões rochosos utilizando técnica, equilíbrio e concentração. Sempre praticada com equipamentos de segurança e, de preferência, com acompanhamento capacitado.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Cordas</li><li>Mosquetões</li><li>Capacete</li><li>Cadeirinha</li></ul></div></div>
+  <div class="modal-body"><img class="modal-img" loading="eager" decoding="async" src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1b8277e66-b358-49ab-bd67-50b345c7d06f.png" alt="Ilustração em estilo pintura realista de escaladora em paredão de rocha" onload="this.classList.add('loaded')" onerror="modalImgFallback(this)"><p>Ascensão de paredões rochosos utilizando técnica, equilíbrio e concentração. Sempre praticada com equipamentos de segurança e, de preferência, com acompanhamento capacitado.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Cordas</li><li>Mosquetões</li><li>Capacete</li><li>Cadeirinha</li></ul></div></div>
 </div>
 
 <div class="modal" id="m-rapel" role="dialog" aria-modal="true" aria-label="Rapel">
   <div class="modal-box"><div class="modal-head"><div><h3>Rapel</h3><span class="origin">Descida controlada</span></div><button class="modal-close" onclick="closeModal('m-rapel')" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></div>
-  <div class="modal-body"><img src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/10004f405-ca8a-4487-a59d-8892380e75aa.png" alt="Ilustração em estilo pintura realista de praticante de rapel em penhasco"><p>Técnica de descida em paredões, cachoeiras e estruturas verticais, com controle da corda e do corpo. Trabalha confiança, controle emocional e atenção aos procedimentos de segurança.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Cordas específicas</li><li>Luvas</li><li>Capacete</li></ul></div></div>
+  <div class="modal-body"><img class="modal-img" loading="eager" decoding="async" src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/10004f405-ca8a-4487-a59d-8892380e75aa.png" alt="Ilustração em estilo pintura realista de praticante de rapel em penhasco" onload="this.classList.add('loaded')" onerror="modalImgFallback(this)"><p>Técnica de descida em paredões, cachoeiras e estruturas verticais, com controle da corda e do corpo. Trabalha confiança, controle emocional e atenção aos procedimentos de segurança.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Cordas específicas</li><li>Luvas</li><li>Capacete</li></ul></div></div>
 </div>
 
 <div class="modal" id="m-rafting" role="dialog" aria-modal="true" aria-label="Rafting">
   <div class="modal-box"><div class="modal-head"><div><h3>Rafting</h3><span class="origin">Trabalho em equipe nas corredeiras</span></div><button class="modal-close" onclick="closeModal('m-rafting')" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></div>
-  <div class="modal-body"><img src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1fd5d0547-c074-4a89-a88a-97070ec20b75.png" alt="Ilustração em estilo pintura realista de equipe de rafting em corredeira"><p>Descida de rios com corredeiras em botes infláveis, exigindo remadas coordenadas de toda a equipe. É uma prática que combina adrenalina, cooperação e muita comunicação.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Colete salva-vidas</li><li>Capacete</li><li>Remo</li></ul></div></div>
+  <div class="modal-body"><img class="modal-img" loading="eager" decoding="async" src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1fd5d0547-c074-4a89-a88a-97070ec20b75.png" alt="Ilustração em estilo pintura realista de equipe de rafting em corredeira" onload="this.classList.add('loaded')" onerror="modalImgFallback(this)"><p>Descida de rios com corredeiras em botes infláveis, exigindo remadas coordenadas de toda a equipe. É uma prática que combina adrenalina, cooperação e muita comunicação.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Colete salva-vidas</li><li>Capacete</li><li>Remo</li></ul></div></div>
 </div>
 
 <div class="modal" id="m-arvorismo" role="dialog" aria-modal="true" aria-label="Arvorismo">
   <div class="modal-box"><div class="modal-head"><div><h3>Arvorismo</h3><span class="origin">Circuitos nas copas das árvores</span></div><button class="modal-close" onclick="closeModal('m-arvorismo')" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></div>
-  <div class="modal-body"><img src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/191d44092-4fa6-413d-bd0e-2a761bb80aff.png" alt="Ilustração em estilo pintura realista de pessoa em ponte suspensa entre árvores"><p>Percursos suspensos entre árvores, com pontes, cabos e plataformas. Desenvolve equilíbrio, coragem e confiança, sempre com sistemas de segurança contínuos.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Cintos de segurança</li><li>Capacete</li><li>Cordas</li></ul></div></div>
+  <div class="modal-body"><img class="modal-img" loading="eager" decoding="async" src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/191d44092-4fa6-413d-bd0e-2a761bb80aff.png" alt="Ilustração em estilo pintura realista de pessoa em ponte suspensa entre árvores" onload="this.classList.add('loaded')" onerror="modalImgFallback(this)"><p>Percursos suspensos entre árvores, com pontes, cabos e plataformas. Desenvolve equilíbrio, coragem e confiança, sempre com sistemas de segurança contínuos.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Cintos de segurança</li><li>Capacete</li><li>Cordas</li></ul></div></div>
 </div>
 
 <div class="modal" id="m-ciclo" role="dialog" aria-modal="true" aria-label="Cicloturismo">
   <div class="modal-box"><div class="modal-head"><div><h3>Cicloturismo</h3><span class="origin">Viagens sobre duas rodas</span></div><button class="modal-close" onclick="closeModal('m-ciclo')" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></div>
-  <div class="modal-body"><img src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/19733f339-d861-41c1-a3e2-621af21d8fa7.png" alt="Ilustração em estilo pintura realista de ciclista em estrada rural"><p>Viagens de bicicleta por estradas e caminhos naturais, unindo resistência física, autonomia e contemplação da paisagem. Exige planejamento de rota e manutenção preventiva.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Bicicleta revisada</li><li>Capacete</li><li>Mochila com água</li><li>Kit de reparos</li></ul></div></div>
+  <div class="modal-body"><img class="modal-img" loading="eager" decoding="async" src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/19733f339-d861-41c1-a3e2-621af21d8fa7.png" alt="Ilustração em estilo pintura realista de ciclista em estrada rural" onload="this.classList.add('loaded')" onerror="modalImgFallback(this)"><p>Viagens de bicicleta por estradas e caminhos naturais, unindo resistência física, autonomia e contemplação da paisagem. Exige planejamento de rota e manutenção preventiva.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Bicicleta revisada</li><li>Capacete</li><li>Mochila com água</li><li>Kit de reparos</li></ul></div></div>
 </div>
 
 <div class="modal" id="m-canoa" role="dialog" aria-modal="true" aria-label="Canoagem">
   <div class="modal-box"><div class="modal-head"><div><h3>Canoagem</h3><span class="origin">Navegação com remos</span></div><button class="modal-close" onclick="closeModal('m-canoa')" aria-label="Fechar"><svg class="icon"><use href="#i-x"/></svg></button></div>
-  <div class="modal-body"><img src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/13328b031-ecec-419f-88b0-47c5dc77e09c.png" alt="Ilustração em estilo pintura realista de canoagem em rio tranquilo"><p>Navegação em rios e lagos utilizando canoas ou caiaques e remos. Pode ser praticada de forma tranquila, contemplativa, ou em corredeiras, exigindo técnica e equilíbrio.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Canoa ou caiaque</li><li>Remo</li><li>Colete salva-vidas</li></ul></div></div>
+  <div class="modal-body"><img class="modal-img" loading="eager" decoding="async" src="https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/13328b031-ecec-419f-88b0-47c5dc77e09c.png" alt="Ilustração em estilo pintura realista de canoagem em rio tranquilo" onload="this.classList.add('loaded')" onerror="modalImgFallback(this)"><p>Navegação em rios e lagos utilizando canoas ou caiaques e remos. Pode ser praticada de forma tranquila, contemplativa, ou em corredeiras, exigindo técnica e equilíbrio.</p><div class="equip-title">Equipamentos</div><ul class="equip-list"><li>Canoa ou caiaque</li><li>Remo</li><li>Colete salva-vidas</li></ul></div></div>
 </div>
 
 <script>
@@ -773,13 +792,40 @@ const state = {
 
 const TITLES = ["Início","Módulo 1 • Aula 1: Esportes de Campo e Taco","Módulo 1 • Aula 2: Modalidades","Módulo 1 • Aula 3: Regras e Benefícios","Módulo 1 • Aula 4: Atividade Interativa","Módulo 2 • Aula 5: Aventura na Natureza","Módulo 2 • Aula 6: Práticas e Equipamentos","Módulo 2 • Aula 7: Cuidados e Sustentabilidade","Módulo 2 • Aula 8: Revisão e Quiz Final","Revisão do Trimestre","Conclusão"];
 
+/* ================= PRÉ-CARREGAMENTO VIA JS (reforço do preload do HTML) ================= */
+const ALL_IMAGES = [
+  "https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1fdddd267-2b1c-46b9-8f5c-9ebe7eb50beb.png",
+  "https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1e082c1ed-5206-4dcf-aaf3-0e4af22760dd.png",
+  "https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/171a1a012-b7fe-4285-b9b6-841f911073e2.png",
+  "https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/193cadff9-cb74-4df5-ae3b-494963508eb5.png",
+  "https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/10f84207b-8ed6-497d-939b-8b71c0831ddf.png",
+  "https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/18bc71b78-f6bc-44e5-9be0-1ecf1edb411a.png",
+  "https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1b6e96a08-9fc3-4d3d-a759-38e6a212cb62.png",
+  "https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1b8277e66-b358-49ab-bd67-50b345c7d06f.png",
+  "https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/10004f405-ca8a-4487-a59d-8892380e75aa.png",
+  "https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/1fd5d0547-c074-4a89-a88a-97070ec20b75.png",
+  "https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/191d44092-4fa6-413d-bd0e-2a761bb80aff.png",
+  "https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/19733f339-d861-41c1-a3e2-621af21d8fa7.png",
+  "https://image.qwenlm.ai/public_source/90c1da8a-3553-4342-9533-32495a1265ec/13328b031-ecec-419f-88b0-47c5dc77e09c.png"
+];
+function preloadImages(){ ALL_IMAGES.forEach(src=>{ const im = new Image(); im.src = src; }); }
+
+function modalImgFallback(img){
+  /* Se a imagem falhar, tenta recarregar uma vez para garantir que sempre apareça */
+  if(!img.dataset.retried){
+    img.dataset.retried = "1";
+    const src = img.src;
+    setTimeout(()=>{ img.src = src + "?retry=1"; }, 800);
+  }
+}
+
 /* ================= DADOS DOS QUIZZES ================= */
 const QUIZZES = {
   mini: { retry:true, data: [
     { q:"Originou-se nos Estados Unidos e é jogado em um campo em formato de diamante, com taco redondo e bases.", opts:["Críquete","Taco","Beisebol","Softbol"], correct:2, exp:"O beisebol tem origem nos Estados Unidos." },
     { q:"É uma variação do beisebol, praticada com uma bola maior e arremesso por baixo.", opts:["Softbol","Beisebol","Taco","Críquete"], correct:0, exp:"O softbol é a variação do beisebol com bola maior." },
     { q:"Muito popular na Inglaterra, na Índia e na Austrália, utiliza taco achatado e wickets.", opts:["Taco","Beisebol","Softbol","Críquete"], correct:3, exp:"O críquete é o esporte tradicional desses países." },
-    { q:"Jogo popular brasileiro, de rua, praticado com tacos de madeira e bola pequena.", opts:["Críquete","Taco","Softbol","Beisebol"], correct:1, exp:"O taco (ou bets) é um clássico das ruas do Brasil." },
+    { q:"Jogo popular brasileiro, de rua, praticado com tacos de madeira e garrafa como alvo.", opts:["Críquete","Taco","Softbol","Beisebol"], correct:1, exp:"O taco (ou bets) é um clássico das ruas do Brasil." },
     { q:"Nestes esportes, uma equipe ataca e a outra defende, alternando papéis. Como esses jogos são classificados?", opts:["Esportes individuais","Jogos coletivos de oposição","Práticas aquáticas","Ginástica de apresentação"], correct:1, exp:"São jogos coletivos de oposição com alternância de papéis." }
   ]},
   final: { retry:false, data: [
@@ -792,7 +838,7 @@ const QUIZZES = {
     { q:"Verdadeiro ou Falso: Nos esportes de campo e taco, as duas equipes atacam ao mesmo tempo.", opts:["Verdadeiro","Falso"], correct:1, exp:"Falso: uma ataca e outra defende, alternando os papéis." },
     { q:"Verdadeiro ou Falso: O rapel utiliza cordas específicas, luvas e capacete.", opts:["Verdadeiro","Falso"], correct:0, exp:"Verdadeiro: esses são os equipamentos básicos do rapel." },
     { q:"Associe corretamente a prática e seus equipamentos:", opts:["Escalada: cordas, mosquetões, capacete e cadeirinha","Rafting: luvas e mosquetões","Rapel: remo e colete salva-vidas","Arvorismo: taco redondo e bola"], correct:0, exp:"A escalada exige cordas, mosquetões, capacete e cadeirinha." },
-    { q:"Identifique a modalidade: jogo popular brasileiro de rua, com tacos de madeira e corrida entre casas para marcar pontos.", opts:["Críquete","Taco","Softbol","Beisebol"], correct:1, exp:"É o taco, patrimônio das brincadeiras de rua do Brasil." }
+    { q:"Identifique a modalidade: jogo popular brasileiro de rua, com tacos de madeira e garrafa como alvo dentro de um círculo de giz.", opts:["Críquete","Taco","Softbol","Beisebol"], correct:1, exp:"É o taco, patrimônio das brincadeiras de rua do Brasil." }
   ]}
 };
 
@@ -867,6 +913,9 @@ function openModal(id){
   document.getElementById(id).classList.add("active");
   document.body.style.overflow = "hidden";
   state.explored.add(id);
+  /* Garante que a imagem do modal esteja carregada no momento da abertura */
+  const img = document.querySelector("#"+id+" .modal-img");
+  if(img && !img.complete){ img.src = img.src; }
   updateStats();
 }
 function closeModal(id){
@@ -961,6 +1010,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   renderQuiz("final","quiz-final");
   updateStats();
   updateParallax();
+  preloadImages();
 });
 </script>
 </body>
